@@ -1,5 +1,5 @@
 window.onload = function getLatestGames(){
-    if(window.location.href === "http://127.0.0.1:5500/"){
+    if(window.location.href === "https://renanandrade000.github.io/Naointendorip/"){
         const url = "https://naointendorip-39fe37b3bb9f.herokuapp.com/game"
         createGameList(url);
 
@@ -116,7 +116,7 @@ function createGameList(url){
 }
 
 function refreshPage(){
-    window.location.href = "http://127.0.0.1:5500/"
+    window.location.href = "https://renanandrade000.github.io/Naointendorip/"
 }
 
 function changeTitle(t){
