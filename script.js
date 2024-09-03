@@ -15,14 +15,19 @@ window.onload = function getLatestGames(){
         loadPage()
         console.log("passou");
     }
-
    
 
 }
 
- window.addEventListener('popstate', function(event) {
-       window.history.go(-1);
+    window.addEventListener('popstate', function(event) {
+        event.preventDefault();
+        const state = { page: 'download' };
+        const url = 'downloadPage.html';  // Nova URL
+
+        // Altera a URL sem recarregar a página
+        window.history.pushState(state, "", url);
     });
+
 
 
 function loadPage(){
@@ -30,33 +35,46 @@ function loadPage(){
     const container = document.querySelector("#container");
     const row = document.createElement("div");
     row.className = "d-grid gap-2 col-6 mx-auto";
+    row.style.marginBottom = "2rem"
+    row.style.marginTop = "2.50rem"
     container.appendChild(row)
     const title = document.createElement("h1");
     title.textContent = gameData.name;
     title.className = "col"
     row.appendChild(title)
     const img = document.createElement("img");
-    img.src = gameData.img.toString();
-    img.className = "col";
+    img.src = gameData.img.slice(0,gameData.img.indexOf(",") -5)
+    img.className = "col d-grid gap-2 col-6 mx-auto";
+    img.style.marginBottom = "2rem"
+    img.style.marginTop = "2rem"
     row.appendChild(img);
-    const table = document.createElement("div");
-    table.style.backgroundColor = "white";
+    const table = document.createElement("table");
     table.innerHTML = gameData.table;
-    table.className = "col"
-    row.appendChild(table);
+    table.className = "table table-striped col"
+    const figure  = document.createElement("figure")
+    figure.className = "table-striped";
+    figure.appendChild(table);
+    row.appendChild(figure);
+    const about = document.createElement("h1")
+    about.innerHTML = "About the game"
+    row.appendChild(about)
     const features = document.createElement("div");
     features.textContent = gameData.features;
     features.className = "col";
     row.appendChild(features);
+    const reviewtitle = document.createElement("h1")
+    reviewtitle.innerHTML = "Review"
+    row.appendChild(reviewtitle)
     const review = document.createElement("div");
     review.textContent = gameData.review;
     review.className = "col";
     row.appendChild(review);
     const btnGroup = document.createElement("div");
     btnGroup.className = "d-grid gap-2 col-6 mx-auto"
+    btnGroup.style.marginTop = "2.50rem"
     row.appendChild(btnGroup);
     console.log(gameData)
-    for(let i = 0; i < gameData.downloadName.length ; i++){
+    for(let i = 0; i < gameData.downloadName.length -1 ; i++){
         const btn = document.createElement("button")
         btn.className = "btn btn-primary";
         btn.type = "button";
@@ -72,7 +90,8 @@ function loadPage(){
 
 function createGameList(url){
     var gameList = []
- 
+    console.log(url);
+
    fetch(url)
    .then(response =>{
     if(!response.ok){
@@ -91,6 +110,7 @@ function createGameList(url){
             }
             gameList[i] = game
         }
+        
         createCards(gameList);
         
    })
@@ -103,22 +123,38 @@ function refreshPage(){
     window.location.href = "http://127.0.0.1:5500/"
 }
 
+function changeTitle(t){
+    const title = document.getElementById("title")
+    title.textContent = t
+    title.style.paddingBottom = "3rem"
+    title.style.paddingTop = "3rem"
+    title.style.textAlign = "center"
+}
+
 
 function createCards(list = []){
     const container = document.getElementById("card-container");
     container.innerHTML = "";
-   
-
+    
+    if(list.length <= 17 &&  list.length > 0){
+        changeTitle("Results")   
+    }else if(list.length < 1){
+        changeTitle("Cannot find any game")
+    }else{
+        changeTitle("Latest games")
+    }
+    
 
     list.forEach(game =>{
        const a = document.createElement("a");
        
        a.style.marginTop = "1rem";
+       a.style.display = "flex"
+       a.style.gap = "0rem"
        a.className = "text-decoration-none"
-       //a.href = game.link
        const card = document.createElement("div");
        card.className = "card"
-       card.style.width = "18rem";
+       card.style.width = "15rem";
        card.style.marginBottom = "1rem";
        a.appendChild(card)
        const img = document.createElement("img")
@@ -145,6 +181,10 @@ function search(game){
     
     if(!game == ""){
         const searchUrl = "http://localhost:8080/search/" + encodeURIComponent(game);
+        const row = document.getElementsByClassName("d-grid")
+        if(row.length > 0){
+            row[0].remove()
+        }
         createGameList(searchUrl);
         
     }else{
@@ -181,9 +221,12 @@ function downloadPage(link) {
             }
 
            localStorage.setItem('gameData', JSON.stringify(gameData));
-           //console.log(gameData);
-           //console.log(localStorage.getItem('gameData'));
-           window.location.replace('downloadPage.html')
+           if(window.location.href === "http://127.0.0.1:5500/"){
+                window.location.replace('downloadPage.html')
+           }else{
+                getLatestGames()
+           }
+           
         })
 
         

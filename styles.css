@@ -1,5 +1,5 @@
 body{
-    background-color: #343a40;
+    background-color: #ffffff;
 }
 
 .contaier{
@@ -15,14 +15,22 @@ body{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 9999; /* Ensure spinner is on top */
-    width: 100%; /* Ensure it covers full width */
-    height: 100%; /* Ensure it covers full height */
+    z-index: 9999;
+    width: 100%;
+    height: 100%; 
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+#title{
+    text-align: center;
+}
+
+#card-container{
+    margin: 0.2rem;
+    padding: 0.2rem;
+}
 
 #snackbar {
     visibility: hidden;
