@@ -1,5 +1,6 @@
 window.onload = function getLatestGames(){
-    if(window.location.href === "https://renanandrade000.github.io/Naointendorip/"){
+    if(window.location.pathname === "/"){
+        console.log("aqui")
         const url = "https://naointendorip-39fe37b3bb9f.herokuapp.com/game"
         createGameList(url);
 
@@ -8,14 +9,14 @@ window.onload = function getLatestGames(){
             if (event.key === "Enter") {
                 event.preventDefault()
                 document.getElementById("searchBtn").click();
-                
+                    
             }
         });
     }else{
         loadPage()
-        console.log("passou");
-    }
-   
+        console.log(window.location.pathname); 
+    } 
+    
 }
 
 addEventListener("popstate", function(event){
@@ -28,60 +29,76 @@ addEventListener("popstate", function(event){
 
 function loadPage(){
     var gameData = JSON.parse(localStorage.getItem("gameData"));
+    console.log(gameData)
     const container = document.querySelector("#container");
+    
+    if (!container) {
+        console.error("O elemento '#container' não foi encontrado.");
+        return;
+    }
+
     const row = document.createElement("div");
     row.className = "d-grid gap-2 col-6 mx-auto";
     row.style.marginBottom = "2rem"
     row.style.marginTop = "2.50rem"
     container.appendChild(row)
+    
     const title = document.createElement("h1");
     title.textContent = gameData.name;
     title.className = "col"
     row.appendChild(title)
+
     const img = document.createElement("img");
-    img.src = gameData.img.slice(0,gameData.img.indexOf(",") -5)
+    img.src = gameData.img.slice(0, gameData.img.indexOf(",") - 5);
     img.className = "col d-grid gap-2 col-6 mx-auto";
-    img.style.marginBottom = "2rem"
-    img.style.marginTop = "2rem"
+    img.style.marginBottom = "2rem";
+    img.style.marginTop = "2rem";
     row.appendChild(img);
+
     const table = document.createElement("table");
     table.innerHTML = gameData.table;
-    table.className = "table table-striped col"
-    const figure  = document.createElement("figure")
+    table.className = "table table-striped col";
+    const figure = document.createElement("figure");
     figure.className = "table-striped";
     figure.appendChild(table);
     row.appendChild(figure);
-    const about = document.createElement("h1")
-    about.innerHTML = "About the game"
-    row.appendChild(about)
+
+    const about = document.createElement("h1");
+    about.innerHTML = "About the game";
+    row.appendChild(about);
+
     const features = document.createElement("div");
     features.textContent = gameData.features;
     features.className = "col";
     row.appendChild(features);
-    const reviewtitle = document.createElement("h1")
-    reviewtitle.innerHTML = "Review"
-    row.appendChild(reviewtitle)
+
+    const reviewtitle = document.createElement("h1");
+    reviewtitle.innerHTML = "Review";
+    row.appendChild(reviewtitle);
+
     const review = document.createElement("div");
     review.textContent = gameData.review;
     review.className = "col";
     row.appendChild(review);
+
     const btnGroup = document.createElement("div");
-    btnGroup.className = "d-grid gap-2 col-6 mx-auto"
-    btnGroup.style.marginTop = "2.50rem"
+    btnGroup.className = "d-grid gap-2 col-6 mx-auto";
+    btnGroup.style.marginTop = "2.50rem";
     row.appendChild(btnGroup);
-    console.log(gameData)
-    for(let i = 0; i < gameData.downloadName.length -1 ; i++){
-        const btn = document.createElement("button")
+
+    console.log(gameData);
+    for (let i = 0; i < gameData.downloadName.length; i++) {
+        const btn = document.createElement("button");
         btn.className = "btn btn-primary";
         btn.type = "button";
         btn.textContent = gameData.downloadName[i];
         btn.onclick = () => {
-            window.open(gameData.downloadLink[i],'_blank');
+            window.open(gameData.downloadLink[i], '_blank');
         };
         btnGroup.appendChild(btn);
     }
-
 }
+
 
 
 function createGameList(url){
@@ -90,6 +107,8 @@ function createGameList(url){
 
    fetch(url)
    .then(response =>{
+    console.log("Response status:", response.status);
+    console.log("Response headers:", response.headers);
     if(!response.ok){
         throw Error("deu merda")
     }
@@ -213,7 +232,7 @@ function downloadPage(link) {
                 downloadName: data.downloadName,
                 downloadLink: data.downloadLink
             };
-
+            console.log(gameData)
             localStorage.setItem('gameData', JSON.stringify(gameData));
             history.pushState({page: 'page1'}, '', "/");
             window.location.replace('downloadPage.html');
@@ -222,6 +241,3 @@ function downloadPage(link) {
             console.error("Error:", error);
         });
 }
-
-
-
