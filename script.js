@@ -16,19 +16,28 @@ window.onload = function getLatestGames(){
         console.log("passou");
     }
    
-
 }
 
-    window.addEventListener('popstate', function(event) {
-        event.preventDefault();
-        const state = { page: 'download' };
-        const url = 'downloadPage.html';  // Nova URL
 
-        // Altera a URL sem recarregar a página
-        window.history.pushState(state, "", url);
-    });
+// Salva o estado atual antes de navegar para a página 2
+/*function saveStateAndNavigate() {
+    // Salva o estado atual
+    history.pushState({page: 'page1'}, '', '/page1.html');
+    
+    // Navega para a página 2
+    window.location.href = '/page2.html';
+}
 
+// Exemplo de chamada para a função
+addEventListener('popstate', saveStateAndNavigate);*/
 
+addEventListener("popstate", function(event){
+    if(event.state && event.state.page === "page1"){
+        window.location.href = "donwloadPage.html"
+    }
+})
+
+ 
 
 function loadPage(){
     var gameData = JSON.parse(localStorage.getItem("gameData"));
@@ -198,11 +207,10 @@ function search(game){
 
 function downloadPage(link) {
     console.log(link);
-    const url = "http://localhost:8080/download"
+    const url = "http://localhost:8080/download";
+    const encoded = encodeURIComponent(link);
 
-    const encoded = encodeURIComponent(link)
-
-    fetch(url+`?link=${encoded}`)
+    fetch(url + `?link=${encoded}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error("Request failed");
@@ -218,23 +226,16 @@ function downloadPage(link) {
                 review: data.review,
                 downloadName: data.downloadName,
                 downloadLink: data.downloadLink
-            }
+            };
 
-           localStorage.setItem('gameData', JSON.stringify(gameData));
-           if(window.location.href === "http://127.0.0.1:5500/"){
-                window.location.replace('downloadPage.html')
-           }else{
-                getLatestGames()
-           }
-           
+            localStorage.setItem('gameData', JSON.stringify(gameData));
+            history.pushState({page: 'page1'}, '', "/");
+            window.location.replace('downloadPage.html');
         })
-
-        
         .catch(error => {
-            console.error("deu merda:", error);
+            console.error("Error:", error);
         });
 }
-
 
 
 
