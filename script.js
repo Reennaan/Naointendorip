@@ -1,6 +1,6 @@
 window.onload = function getLatestGames(){
     if(window.location.href === "http://127.0.0.1:5500/"){
-        const url = "http://localhost:8080/game"
+        const url = "https://naointendorip-39fe37b3bb9f.herokuapp.com/game"
         createGameList(url);
 
         const input = document.getElementById("searchInput");
@@ -17,19 +17,6 @@ window.onload = function getLatestGames(){
     }
    
 }
-
-
-// Salva o estado atual antes de navegar para a página 2
-/*function saveStateAndNavigate() {
-    // Salva o estado atual
-    history.pushState({page: 'page1'}, '', '/page1.html');
-    
-    // Navega para a página 2
-    window.location.href = '/page2.html';
-}
-
-// Exemplo de chamada para a função
-addEventListener('popstate', saveStateAndNavigate);*/
 
 addEventListener("popstate", function(event){
     if(event.state && event.state.page === "page1"){
@@ -189,7 +176,7 @@ function createCards(list = []){
 function search(game){
     
     if(!game == ""){
-        const searchUrl = "http://localhost:8080/search/" + encodeURIComponent(game);
+        const searchUrl = "https://naointendorip-39fe37b3bb9f.herokuapp.com/search/" + encodeURIComponent(game);
         const row = document.getElementsByClassName("d-grid")
         if(row.length > 0){
             row[0].remove()
@@ -206,8 +193,7 @@ function search(game){
 }
 
 function downloadPage(link) {
-    console.log(link);
-    const url = "http://localhost:8080/download";
+    const url = "https://naointendorip-39fe37b3bb9f.herokuapp.com/download";
     const encoded = encodeURIComponent(link);
 
     fetch(url + `?link=${encoded}`)
