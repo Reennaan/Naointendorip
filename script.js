@@ -22,7 +22,7 @@ window.onload = function getLatestGames(){
 
 addEventListener("popstate", function(event){
     if(event.state && event.state.page === "page1"){
-        window.location.href = "donwloadPage.html"
+        window.location.href = "/Naointendorip/downloadPage.html"
     }
 })
 
@@ -236,7 +236,7 @@ function downloadPage(link) {
             console.log(gameData)
             localStorage.setItem('gameData', JSON.stringify(gameData));
             history.pushState({page: 'page1'}, '', "/");
-            window.location.replace('downloadPage.html');
+            window.location.replace('/Naointendorip/downloadPage.html');
         })
         .catch(error => {
             console.error("Error:", error);
