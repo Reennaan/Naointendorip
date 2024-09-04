@@ -1,4 +1,5 @@
 window.onload = function getLatestGames(){
+    console.log(window.location.pathname)
     if(window.location.pathname === "https://renanandrade000.github.io/Naointendorip/"){
         console.log("aqui")
         const url = "https://naointendorip-39fe37b3bb9f.herokuapp.com/game"
